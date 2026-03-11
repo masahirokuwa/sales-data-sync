@@ -1,0 +1,13 @@
+# 秘密情報
+*.json
+!package.json
+
+# 一時出力
+output/
+
+# Claude作業用
+_claude/
+
+# Python
+__pycache__/
+*.pyc

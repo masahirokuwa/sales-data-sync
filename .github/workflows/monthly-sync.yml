@@ -1,0 +1,29 @@
+name: 月次営業データ転記
+
+on:
+  # 毎月1日 AM9:00 JST (= UTC 0:00) に自動実行
+  schedule:
+    - cron: '0 0 1 * *'
+  # 手動実行も可能
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install httpx gspread oauth2client
+
+      - name: Run sync script
+        env:
+          LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+          LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+          GOOGLE_JSON_KEY: ${{ secrets.GOOGLE_JSON_KEY }}
+        run: python lark_to_gsheets.py
