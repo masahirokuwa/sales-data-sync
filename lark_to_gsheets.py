@@ -200,11 +200,11 @@ def get_previous_month_range():
 def get_gsheets_client():
     """Google Sheets認証済みクライアントとスプレッドシートを返す"""
     scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-    # GOOGLE_JSON_KEY がファイルパスならそのまま、JSON文字列なら一時ファイルに書き出す
+    # GOOGLE_JSON_KEY がファイルパスならそのまま、JSON文字列なら辞書に変換して使う
     if os.path.isfile(GOOGLE_JSON_KEY):
         credentials = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_JSON_KEY, scopes)
     else:
-        key_data = json.loads(GOOGLE_JSON_KEY)
+        key_data = json.loads(GOOGLE_JSON_KEY, strict=False)
         credentials = ServiceAccountCredentials.from_json_keyfile_dict(key_data, scopes)
     gc = gspread.authorize(credentials)
     sh = gc.open_by_url(TARGET_SPREADSHEET_URL)
