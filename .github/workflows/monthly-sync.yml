@@ -21,9 +21,12 @@ jobs:
       - name: Install dependencies
         run: pip install httpx gspread oauth2client
 
+      - name: Write Google credentials file
+        run: echo '${{ secrets.GOOGLE_JSON_KEY }}' > gcp-key.json
+
       - name: Run sync script
         env:
           LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
           LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
-          GOOGLE_JSON_KEY: ${{ secrets.GOOGLE_JSON_KEY }}
+          GOOGLE_JSON_KEY: gcp-key.json
         run: python lark_to_gsheets.py
